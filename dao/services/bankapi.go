@@ -54,15 +54,15 @@ func (bank BankCommunicator) GetValue(cardNumber int) <-chan models.ValueRespons
 	go func() {
 		response, err := bank.Client.Get(route)
 		if err != nil {
-			log.Panicf("error gettings value from bank", err)
+			log.Panicf("error gettings value from bank %s", err.Error())
 		}
 		defer response.Body.Close()
 
 		var model models.ValueResponse
 		json.NewDecoder(response.Body).Decode(&model)
-		
+
 		channel <- model
-		
+
 		close(channel)
 	}()
 	return channel
