@@ -25,9 +25,9 @@ func init() {
 }
 
 type UserTable struct {
-	Id         int    `db:"id"; json:"id";`
-	Name       string `db:"name"; json:"name";`
-	CardNumber int    `db:"card_number"; json:"card_number";`
+	Id         int    `db:"id" json:"id"`
+	Name       string `db:"name" json:"name"`
+	CardNumber int    `db:"card_number" json:"card_number"`
 }
 
 type UserRepositoryImpl struct {
