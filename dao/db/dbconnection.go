@@ -15,7 +15,7 @@ func init() {
 	db, _ = sql.Open("mysql", cts.MySQLConfig.FormatDSN())
 	stmt, err := db.Prepare(cts.DatabaseSchema)
 	if err != nil {
-		log.Panicf("error creation tables", err)
+		log.Panicf("error creation tables %s", err.Error())
 	}
 	stmt.Exec()
 
