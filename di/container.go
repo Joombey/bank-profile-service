@@ -7,7 +7,7 @@ import (
 )
 
 func Init() {
-	container.init()
+	(&container).init()
 }
 
 type BaseContainer struct {
@@ -18,17 +18,13 @@ type BaseContainer struct {
 func (c *BaseContainer) init() {
 	var bank = services.BankCommunicator{}
 	var user = db.UserRepositoryImpl{}
-	c = &BaseContainer{
-		Bank:           bank.New(),
-		UserRepository: user.New(),
-	}
+
+	c.Bank = bank.New()
+	c.UserRepository = user.New()
 }
 
-func GetContainer() *BaseContainer {
-	if (container == &BaseContainer{}) {
-		container.init()
-	}
+func GetContainer() BaseContainer {
 	return container
 }
 
-var container *BaseContainer
+var container = BaseContainer{}
