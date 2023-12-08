@@ -3,26 +3,16 @@ package di
 import (
 	"farukh.go/profile/dao/db"
 	"farukh.go/profile/dao/services"
-	"farukh.go/profile/models"
+	"farukh.go/profile/repos"
 )
 
-func init() {
+func Init() {
 	container.init()
 }
 
-type BankRepository interface {
-	Transfer(from int, to int, value float32) <-chan []models.ValueResponse
-	GetValue(cardNumber int) <-chan models.ValueResponse
-	NewCard() <-chan models.ValueResponse
-}
-
-type UserRepository interface {
-	CreateUser(name string, cardNumber int) <-chan db.UserTable
-}
-
 type BaseContainer struct {
-	Bank           BankRepository
-	UserRepository UserRepository
+	Bank           repos.BankRepository
+	UserRepository repos.UserRepository
 }
 
 func (c *BaseContainer) init() {

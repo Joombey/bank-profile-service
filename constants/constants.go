@@ -16,10 +16,10 @@ var MySQLConfig = mysql.Config{
 }
 
 const (
-	baseBankApi   string = "localhost:8081"
+	baseBankApi   string = "http://localhost:8081"
 	CreateCard    string = baseBankApi + "/new-card"   // GET
 	TransferMoney string = baseBankApi + "/transfer"   // POST
-	GetValue      string = baseBankApi + "/value/:num" // GET with route argument :num
+	GetValue      string = baseBankApi + "/get-card/" // GET with route argument :num
 )
 
 const DatabaseSchema = `

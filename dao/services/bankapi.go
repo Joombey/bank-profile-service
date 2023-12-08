@@ -9,28 +9,22 @@ import (
 	"math"
 	"net/http"
 	"time"
-
+	cts "farukh.go/profile/constants"
 	"farukh.go/profile/models"
 )
 
-const (
-	valueRoute string = "localhost:8081/value"
-	baseApi    string = "http://localhost:8081"
-)
-
 type BankCommunicator struct {
-	Client *http.Client
+	client *http.Client
 }
 
 func (bank BankCommunicator) New() *BankCommunicator {
 	client := http.Client{Timeout: time.Duration(10) * time.Second}
 	return &BankCommunicator{
-		Client: &client,
+		client: &client,
 	}
 }
 
 func (bank BankCommunicator) Transfer(from int, to int, value float32) <-chan []models.ValueResponse {
-	route := fmt.Sprintf("%s/transfer", baseApi)
 	channel := make(chan []models.ValueResponse)
 	go func() {
 		model := models.TransferDTO{
@@ -39,7 +33,7 @@ func (bank BankCommunicator) Transfer(from int, to int, value float32) <-chan []
 			Value: value,
 		}
 		jsonData, _ := json.MarshalIndent(&model, "", " ")
-		response, _ := bank.Client.Post(route, "application/json", bytes.NewBuffer(jsonData))
+		response, _ := bank.client.Post(cts.TransferMoney, "application/json", bytes.NewBuffer(jsonData))
 		responseModels := make([]models.ValueResponse, 0, 2)
 		json.NewDecoder(response.Body).Decode(&responseModels)
 		channel <- responseModels
@@ -49,10 +43,10 @@ func (bank BankCommunicator) Transfer(from int, to int, value float32) <-chan []
 }
 
 func (bank BankCommunicator) GetValue(cardNumber int) <-chan models.ValueResponse {
-	route := fmt.Sprintf("%s/%d", baseApi, cardNumber)
+	route := fmt.Sprintf("%s%d", cts.GetValue, cardNumber)
 	channel := make(chan models.ValueResponse)
 	go func() {
-		response, err := bank.Client.Get(route)
+		response, err := bank.client.Get(route)
 		if err != nil {
 			log.Panicf("error gettings value from bank %s", err.Error())
 		}
@@ -69,11 +63,10 @@ func (bank BankCommunicator) GetValue(cardNumber int) <-chan models.ValueRespons
 }
 
 func (bank *BankCommunicator) NewCard() <-chan models.ValueResponse {
-	route := fmt.Sprintf("%s/new-card", baseApi)
 	channel := make(chan models.ValueResponse)
 	go func() {
 		var model models.ValueResponse
-		response, _ := bank.Client.Get(route)
+		response, _ := bank.client.Get(cts.CreateCard)
 		json.NewDecoder(response.Body).Decode(&model)
 		channel <- model
 		close(channel)
