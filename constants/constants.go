@@ -7,19 +7,19 @@ import (
 var MySQLConfig = mysql.Config{
 	User:                 "root",
 	Passwd:               "root",
-	DBName:               "maria_db",
+	DBName:               "db",
 	Net:                  "tcp",
-	Addr:                 "localhost:3306",
+	Addr:                 "profile-db:3306",
 	AllowNativePasswords: true,
 	CheckConnLiveness:    true,
 	MaxAllowedPacket:     64 << 20,
 }
 
 const (
-	baseBankApi   string = "http://localhost:8081"
-	CreateCard    string = baseBankApi + "/new-card"   // GET
-	TransferMoney string = baseBankApi + "/transfer"   // POST
-	GetValue      string = baseBankApi + "/get-card/" // GET with route argument :num
+	baseBankApi   string = "http://bank:8080"
+	CreateCard    string = baseBankApi + "/new-card" // GET
+	TransferMoney string = baseBankApi + "/transfer" // POST
+	GetValue      string = baseBankApi + "/get-card" // GET with route argument :num
 )
 
 const DatabaseSchema = `

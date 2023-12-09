@@ -9,16 +9,19 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
+var localDb *sql.DB
 
 func init() {
-	db, _ = sql.Open("mysql", cts.MySQLConfig.FormatDSN())
+	db, err := sql.Open("mysql", cts.MySQLConfig.FormatDSN())
+	defer func() { localDb = db }()
+	if err != nil {
+		log.Panicf("error opening db %s", err.Error())
+	}
 	stmt, err := db.Prepare(cts.DatabaseSchema)
 	if err != nil {
 		log.Panicf("error creation tables %s", err.Error())
 	}
 	stmt.Exec()
-
 	var version string
 	db.QueryRow("SELECT VERSION()").Scan(&version)
 	fmt.Println("Connected to:", version)
@@ -35,7 +38,7 @@ type UserRepositoryImpl struct {
 }
 
 func (r UserRepositoryImpl) New() *UserRepositoryImpl {
-	return &UserRepositoryImpl{db: db}
+	return &UserRepositoryImpl{db: localDb}
 }
 
 func (repo *UserRepositoryImpl) CreateUser(name string, cardNumber int) <-chan UserTable {
@@ -54,7 +57,8 @@ func (repo *UserRepositoryImpl) GetUserById(id int) <-chan UserTable {
 	tableChan := make(chan UserTable)
 	go func() {
 		var user = UserTable{}
-		repo.db.QueryRow("SELECT * FROM users WHERE id == ?", id).Scan(&user.Id, &user.Name, &user.CardNumber)
+		repo.db.QueryRow("SELECT * FROM users WHERE id = ?", id).Scan(&user.Id, &user.Name, &user.CardNumber)
+		println(user.Id, user.Name, user.CardNumber)
 		tableChan <- user
 		close(tableChan)
 	}()

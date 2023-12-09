@@ -16,6 +16,7 @@ var userRepo = container.UserRepository
 func GetCredentialsHandler(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user := <-userRepo.GetUserById(id)
+	println(id == user.Id)
 	c.IndentedJSON(http.StatusOK, user)
 }
 

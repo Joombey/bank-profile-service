@@ -7,8 +7,8 @@ import (
 
 func Run() {
 	router := gin.Default()
-	router.GET("/credentials/:id", hr.CreateUserHandler)
+	router.GET("/credentials/:id", hr.GetCredentialsHandler)
 	router.GET("/create/:name", hr.CreateUserHandler)
 	router.POST("/send", hr.SendMoneyHandler)
-	router.Run("localhost:8080")
+	router.Run()
 }

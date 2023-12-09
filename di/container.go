@@ -6,10 +6,6 @@ import (
 	"farukh.go/profile/repos"
 )
 
-func Init() {
-	(&container).init()
-}
-
 type BaseContainer struct {
 	Bank           repos.BankRepository
 	UserRepository repos.UserRepository
@@ -24,6 +20,9 @@ func (c *BaseContainer) init() {
 }
 
 func GetContainer() BaseContainer {
+	if (container == BaseContainer{}) {
+		(&container).init()
+	}
 	return container
 }
 

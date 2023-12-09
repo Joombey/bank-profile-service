@@ -9,18 +9,19 @@ import (
 	"math"
 	"net/http"
 	"time"
+
 	cts "farukh.go/profile/constants"
 	"farukh.go/profile/models"
 )
 
 type BankCommunicator struct {
-	client *http.Client
+	client http.Client
 }
 
 func (bank BankCommunicator) New() *BankCommunicator {
 	client := http.Client{Timeout: time.Duration(10) * time.Second}
 	return &BankCommunicator{
-		client: &client,
+		client: client,
 	}
 }
 
@@ -43,7 +44,7 @@ func (bank BankCommunicator) Transfer(from int, to int, value float32) <-chan []
 }
 
 func (bank BankCommunicator) GetValue(cardNumber int) <-chan models.ValueResponse {
-	route := fmt.Sprintf("%s%d", cts.GetValue, cardNumber)
+	route := fmt.Sprintf("%s/%d", cts.GetValue, cardNumber)
 	channel := make(chan models.ValueResponse)
 	go func() {
 		response, err := bank.client.Get(route)
@@ -65,6 +66,7 @@ func (bank BankCommunicator) GetValue(cardNumber int) <-chan models.ValueRespons
 func (bank *BankCommunicator) NewCard() <-chan models.ValueResponse {
 	channel := make(chan models.ValueResponse)
 	go func() {
+		fmt.Print(bank.client)
 		var model models.ValueResponse
 		response, _ := bank.client.Get(cts.CreateCard)
 		json.NewDecoder(response.Body).Decode(&model)
