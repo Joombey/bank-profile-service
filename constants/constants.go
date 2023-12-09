@@ -22,9 +22,16 @@ const (
 	GetValue      string = baseBankApi + "/get-card" // GET with route argument :num
 )
 
-const DatabaseSchema = `
+const DatabaseSchemaMySQL = `
 CREATE TABLE IF NOT EXISTS users(
 	id int primary key auto_increment,
+	name text not null,
+	card_number int
+);
+`
+const DatabaseSchemaPostgres = `
+CREATE TABLE IF NOT EXISTS users(
+	id SERIAL primary key,
 	name text not null,
 	card_number int
 );

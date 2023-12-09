@@ -19,4 +19,18 @@ jobs:
           username: json_key
           password: ${{ secrets.YC_KEYS }}
       - name: pushing
-        run: docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app:latest
+        run: docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app:lates
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [build-docker-image]
+    steps:
+    - name: Deploy serverless container
+      uses: yc-actions/yc-sls-container-deploy@v1
+      with:
+        yc-sa-json-credentials: ${{ secrets.YC_KEYS }}
+        container-name: ${{ secrets.YC_NAME }}
+        folder-id: ${{ secrets.YC_FOLDER_ID }}
+        revision-image-url: cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app:latest
+        revision-service-account-id: ${{ secrets.YC_NAME_ID }}
+  
