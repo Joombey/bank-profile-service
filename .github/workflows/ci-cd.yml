@@ -8,10 +8,10 @@ jobs:
     steps:
       - name: pulling
         uses: actions/checkout@v3
-      
+
       - name: docker image build
         run: docker build -t cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app .
-      
+
       - name: docker login
         uses: docker/login-action@v3.0.0
         with:
@@ -19,7 +19,7 @@ jobs:
           username: json_key
           password: ${{ secrets.YC_KEYS }}
       - name: pushing
-        run: docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app:lates
+        run: docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/profile-app:latest
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
