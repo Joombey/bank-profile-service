@@ -3,8 +3,24 @@ on:
   push:
       branches: ["main"]
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      TEST: true
+    steps:
+      - name: fetch
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+      - name: Build app
+        run: |
+          go mod download
+          go test ./tests/ -v
   build-docker-image:
     runs-on: ubuntu-latest
+    needs: [test]
     steps:
       - name: pulling
         uses: actions/checkout@v3

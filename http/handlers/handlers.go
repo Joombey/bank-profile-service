@@ -1,34 +1,29 @@
 package handlers
 
 import (
-	"net/http"
 	"strconv"
 
+	"farukh.go/profile/dao/db"
 	"farukh.go/profile/di"
 	"farukh.go/profile/models"
-	"github.com/gin-gonic/gin"
 )
 
-var container = di.GetContainer()
-var bank = container.Bank
-var userRepo = container.UserRepository
+func GetCredentialsHandler(pathVar string) db.UserTable {
+	userRepo := di.GetContainer().UserRepository
 
-func GetCredentialsHandler(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	user := <-userRepo.GetUserById(id)
-	println(id == user.Id)
-	c.IndentedJSON(http.StatusOK, user)
+	id, _ := strconv.Atoi(pathVar)
+	return <-userRepo.GetUserById(id)
 }
 
-func SendMoneyHandler(c *gin.Context) {
-	var sendbody models.TransferDTO
-	c.BindJSON(&sendbody)
-	response := bank.Transfer(sendbody.From, sendbody.To, sendbody.Value)
-	c.IndentedJSON(http.StatusOK, <-response)
+func SendMoneyHandler(sendbody models.TransferDTO) []models.ValueResponse {
+	bank := di.GetContainer().Bank
+
+	return <-bank.Transfer(sendbody.From, sendbody.To, sendbody.Value)
 }
 
-func CreateUserHandler(c *gin.Context) {
+func CreateUserHandler(pathVar string) db.UserTable{
+	bank := di.GetContainer().Bank
+	userRepo := di.GetContainer().UserRepository
 	cardNumber := (<-bank.NewCard()).CardNumber
-	userChan := userRepo.CreateUser(c.Copy().Param("name"), cardNumber)
-	c.IndentedJSON(http.StatusOK, <-userChan)
+	return <-userRepo.CreateUser(pathVar, cardNumber)
 }

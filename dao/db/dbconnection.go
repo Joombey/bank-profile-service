@@ -5,22 +5,20 @@ import (
 	"fmt"
 	"log"
 
+	in "farukh.go/profile/internal"
 	cts "farukh.go/profile/constants"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 )
 
 var localDb *sql.DB
+var config = in.ObtainConfig()
 
-func init() {
-	// _ := fmt.Sprintf("host=%s port=%d user=%s "+
-	// 	"password=%s dbname=%s sslmode=disable",
-	// 	host, port, user, password, dbname)
-	// db, err := sql.Open("mysql", cts.MySQLConfig.FormatDSN())
-	db, err := sql.Open("postgres", "postgresql://secUREusER:StrongEnoughPassword)@51.250.26.59:5432/postgres?sslmode=disable")
-	db.Exec(`
-	CREATE DATABASE IF NOT EXISTS farukh
-	`)
+func Init() {
+	if config.Env == "test" { 
+		return
+	}
+	db, err := sql.Open(config.DbConfig.Driver, config.DbConfig.Path)
 	defer func() { localDb = db }()
 	if err != nil {
 		log.Panicf("error opening db %s", err.Error())
