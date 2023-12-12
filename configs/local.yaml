@@ -1,5 +1,5 @@
 env: "local"
 
 db:
-  driver: postgres
-  path: "postgresql://secUREusER:StrongEnoughPassword)@51.250.26.59:5432/postgres?sslmode=disable"
+  driver: mysql
+  path: "root:root@tcp(profile-db:3306)/db"
