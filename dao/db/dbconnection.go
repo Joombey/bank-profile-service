@@ -69,3 +69,8 @@ func (repo *UserRepositoryImpl) GetUserById(id int) <-chan UserTable {
 	}()
 	return tableChan
 }
+
+
+func (repo *UserRepositoryImpl) Delete(id int) {
+	repo.db.Exec("DELETE FROM users WHERE id = ?", id)
+}

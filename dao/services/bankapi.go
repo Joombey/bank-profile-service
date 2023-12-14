@@ -76,6 +76,11 @@ func (bank *BankCommunicator) NewCard() <-chan models.ValueResponse {
 	return channel
 }
 
+func (bank *BankCommunicator) Delete(cardNumber int) {
+	url := fmt.Sprintf("%s/%d", cts.DeleteCard, cardNumber)
+	bank.client.Get(url)
+}
+
 func Float64frombytes(bytes []byte) float64 {
 	bits := bin.LittleEndian.Uint64(bytes)
 	float := math.Float64frombits(bits)

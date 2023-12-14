@@ -27,3 +27,10 @@ func CreateUserHandler(pathVar string) db.UserTable{
 	cardNumber := (<-bank.NewCard()).CardNumber
 	return <-userRepo.CreateUser(pathVar, cardNumber)
 }
+
+func Delete(id int) db.UserTable {
+	user := <-di.GetContainer().UserRepository.GetUserById(id)
+	go di.GetContainer().UserRepository.Delete(id)
+	go di.GetContainer().Bank.Delete(user.CardNumber)
+	return user
+}

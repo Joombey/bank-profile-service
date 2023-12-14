@@ -20,6 +20,7 @@ const (
 	CreateCard      string = baseBankApi + "/new-card" // GET
 	TransferMoney   string = baseBankApi + "/transfer" // POST
 	GetValue        string = baseBankApi + "/get-card" // GET with route argument :num
+	DeleteCard      string = baseBankApi + "/delete"   // GET with route argument :num
 	LocalConfigPath string = "I:/dev/go-projects/bank-profile-service/configs/local.yaml"
 )
 
