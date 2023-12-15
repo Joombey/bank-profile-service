@@ -7,16 +7,16 @@ import (
 var MySQLConfig = mysql.Config{
 	User:                 "root",
 	Passwd:               "root",
-	DBName:               "maria_db",
+	DBName:               "db",
 	Net:                  "tcp",
-	Addr:                 "localhost:3306",
+	Addr:                 "localhost:3307",
 	AllowNativePasswords: true,
 	CheckConnLiveness:    true,
 	MaxAllowedPacket:     64 << 20,
 }
 
 const (
-	baseBankApi     string = "http://bank:8080"
+	baseBankApi     string = "http://localhost:8081"
 	CreateCard      string = baseBankApi + "/new-card" // GET
 	TransferMoney   string = baseBankApi + "/transfer" // POST
 	GetValue        string = baseBankApi + "/get-card" // GET with route argument :num

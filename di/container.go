@@ -3,9 +3,10 @@ package di
 import (
 	"farukh.go/profile/dao/db"
 	"farukh.go/profile/dao/services"
-	"farukh.go/profile/internal"
+
+	// "farukh.go/profile/internal"
 	"farukh.go/profile/repos"
-	testImpls "farukh.go/profile/testrepoimpls"
+	// testImpls "farukh.go/profile/testrepoimpls"
 )
 
 type Uploader interface {
@@ -18,16 +19,8 @@ type BaseContainer struct {
 }
 
 func (c *BaseContainer) init() {
-	cfg := internal.ObtainConfig()
-	if cfg.Env != "test" {
-		c.Bank = services.BankCommunicator{}.New()
-		c.UserRepository = db.UserRepositoryImpl{}.New()
-	} else {
-		bank := testImpls.BankTestImple{}.New()
-		c.UserRepository = testImpls.TestUserRepositoryImpl{}.New()
-		uploader = bank
-		c.Bank = bank
-	}
+	c.Bank = services.BankCommunicator{}.New()
+	c.UserRepository = db.UserRepositoryImpl{}.New()
 }
 
 func GetUploader() Uploader {

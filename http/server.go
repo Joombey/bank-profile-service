@@ -28,5 +28,5 @@ func Run() {
 		ctx.IndentedJSON(200, deletedUser)
 	})
 
-	router.Run()
+	router.Run("0.0.0.0:8082")
 }
