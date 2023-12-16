@@ -1,6 +1,7 @@
 package http
 
 import (
+	"net/http"
 	"strconv"
 
 	hr "farukh.go/profile/http/handlers"
@@ -12,15 +13,18 @@ func Run() {
 	router := gin.Default()
 
 	router.GET("/credentials/:id", func(ctx *gin.Context) {
-		hr.GetCredentialsHandler(ctx.Param(":id"))
+		user := hr.GetCredentialsHandler(ctx.Param("id"))
+		ctx.IndentedJSON(http.StatusOK, user)
 	})
 	router.GET("/create/:name", func(ctx *gin.Context) {
-		hr.CreateUserHandler(ctx.Param(":name"))
+		response := hr.CreateUserHandler(ctx.Param("name"))
+		ctx.IndentedJSON(http.StatusOK, response)
 	})
 	router.POST("/send", func(ctx *gin.Context) {
 		var sendbody models.TransferDTO
 		ctx.BindJSON(&sendbody)
-		hr.SendMoneyHandler(sendbody)
+		response := hr.SendMoneyHandler(sendbody)
+		ctx.IndentedJSON(http.StatusOK, response)
 	})
 	router.GET("/block/:id", func(ctx *gin.Context) {
 		idTpDelete, _ := strconv.Atoi(ctx.Param("id"))
@@ -28,5 +32,5 @@ func Run() {
 		ctx.IndentedJSON(200, deletedUser)
 	})
 
-	router.Run("0.0.0.0:8082")
+	router.Run()
 }
