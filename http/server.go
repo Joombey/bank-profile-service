@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -45,14 +44,14 @@ func Run() {
 }
 
 func RunYan() {
-	port, err := strconv.Atoi(os.Getenv("PORT"))
-	if err != nil {
-		panic(err.Error())
+	port := os.Getenv("PORT")
+	if port == "" {
+		return		
 	}
 
 	router := gin.Default()
 	router.GET("/home", func(ctx *gin.Context) {
 		ctx.IndentedJSON(200, "ok")
 	})
-	router.Run(fmt.Sprintf(":%d", port))
+	router.Run(":" + port)
 }
