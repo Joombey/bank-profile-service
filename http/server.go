@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 	"strconv"
-
+	"github.com/Depado/ginprom"
 	hr "farukh.go/profile/http/handlers"
 	"farukh.go/profile/models"
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,13 @@ import (
 
 func Run() {
 	router := gin.Default()
-
+	p := ginprom.New(
+		ginprom.Engine(router),
+		ginprom.Subsystem("gin"),
+		ginprom.Path("/metrics"),
+	)
+	router.Use(p.Instrument())
+	
 	router.GET("/credentials/:id", func(ctx *gin.Context) {
 		user := hr.GetCredentialsHandler(ctx.Param("id"))
 		ctx.IndentedJSON(http.StatusOK, user)
