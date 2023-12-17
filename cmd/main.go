@@ -4,7 +4,7 @@ import (
 	// "os"
 
 	// cts "farukh.go/profile/constants"
-	"farukh.go/profile/dao/db"
+	// "farukh.go/profile/dao/db"
 	"farukh.go/profile/http"
 	// in "farukh.go/profile/internal"
 )
@@ -15,6 +15,6 @@ func main() {
 	// } else {
 	// 	in.Init(path)
 	// }
-	db.Init()
-	http.Run()
+	// db.Init()
+	http.RunYan()
 }

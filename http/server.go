@@ -1,11 +1,14 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 	"strconv"
-	"github.com/Depado/ginprom"
+
 	hr "farukh.go/profile/http/handlers"
 	"farukh.go/profile/models"
+	"github.com/Depado/ginprom"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,4 +42,17 @@ func Run() {
 	})
 
 	router.Run()
+}
+
+func RunYan() {
+	port, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		panic(err.Error())
+	}
+
+	router := gin.Default()
+	router.GET("/home", func(ctx *gin.Context) {
+		ctx.IndentedJSON(200, "ok")
+	})
+	router.Run(fmt.Sprintf(":%d", port))
 }
