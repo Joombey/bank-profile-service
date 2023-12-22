@@ -59,13 +59,28 @@ func RunYan() {
 
 		if id == "" {
 			ctx.IndentedJSON(200, make([]int, 0, 0))
+		} else if id == "1" {
+			ctx.IndentedJSON(200, 1)	
 		} else {
 			ctx.IndentedJSON(404, gin.H { "detail":"Not found" })
 		}
 	})
 
 	router.GET("/movies", func(ctx *gin.Context) {
-		ctx.IndentedJSON(200, make([]int, 0, 0))
+		a := []struct{
+			Title string `json:"title"`
+			Producer string `json:"producer"`
+			Genre string `json:"genre"`
+			Id int `json:"id"`
+		} {
+			{
+				Title: "a",
+				Producer: "b",
+				Genre: "horror",
+				Id: 1,
+			},
+		}
+		ctx.IndentedJSON(200, a)
 	})
 
 	router.Run(":" + port)
