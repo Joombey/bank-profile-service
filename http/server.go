@@ -53,5 +53,15 @@ func RunYan() {
 	router.GET("/home", func(ctx *gin.Context) {
 		ctx.IndentedJSON(200, "ok")
 	})
+
+	router.GET("/movies/:id", func(ctx *gin.Context) {
+		id := ctx.Param("id")
+
+		if id == "" {
+			ctx.IndentedJSON(200, make([]int, 0, 0))
+		} else {
+			ctx.IndentedJSON(404, gin.H { "detail":"Not found" })
+		}
+	}) 
 	router.Run(":" + port)
 }
