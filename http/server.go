@@ -62,6 +62,11 @@ func RunYan() {
 		} else {
 			ctx.IndentedJSON(404, gin.H { "detail":"Not found" })
 		}
-	}) 
+	})
+
+	router.GET("/movies", func(ctx *gin.Context) {
+		ctx.IndentedJSON(200, make([]int, 0, 0))
+	})
+
 	router.Run(":" + port)
 }
